@@ -12,7 +12,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Moon,
-  Sun
+  Sun,
+  Settings
 } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import './Sidebar.css'
@@ -25,6 +26,7 @@ const NAV_ITEMS = [
   { to: '/maintenance', icon: Wrench, label: 'Maintenance' },
   { to: '/fuel-expenses', icon: Fuel, label: 'Fuel & Expenses' },
   { to: '/reports', icon: BarChart3, label: 'Reports' },
+  { to: '/settings', icon: Settings, label: 'Settings' },
 ]
 
 export default function Sidebar() {
@@ -80,7 +82,7 @@ export default function Sidebar() {
           if (role === 'FLEET_MANAGER') return true
           if (role === 'FINANCIAL_ANALYST') return true // Sees everything as well
           if (role === 'SAFETY_OFFICER') {
-            return ['/', '/vehicles', '/drivers', '/maintenance'].includes(item.to)
+            return ['/', '/vehicles', '/drivers', '/maintenance', '/settings'].includes(item.to)
           }
           if (role === 'DRIVER') {
             return ['/trips', '/fuel-expenses'].includes(item.to)
