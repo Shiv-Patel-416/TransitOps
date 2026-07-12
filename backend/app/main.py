@@ -1,5 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from sqlalchemy.exc import IntegrityError
 
 from app.database import Base, engine
 from app.routers.auth import router as auth_router
@@ -41,6 +43,15 @@ app.include_router(fuel_router)
 app.include_router(expense_router)
 app.include_router(dashboard_router)
 app.include_router(reports_router)
+
+
+@app.exception_handler(IntegrityError)
+async def integrity_error_handler(request: Request, exc: IntegrityError):
+    # This catches unique constraint violations (e.g., duplicate email or registration number)
+    return JSONResponse(
+        status_code=400,
+        content={"error": {"code": "INTEGRITY_ERROR", "message": "A database integrity error occurred (e.g., duplicate unique value)."}}
+    )
 
 
 @app.get("/")
