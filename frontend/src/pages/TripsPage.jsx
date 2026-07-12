@@ -119,7 +119,7 @@ export default function TripsPage() {
     }
 
     try {
-      await api.post('/trips/', payload)
+      await api.post('/trips', payload)
       setShowCreateModal(false)
       loadTrips()
     } catch (err) {
