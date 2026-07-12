@@ -84,9 +84,6 @@ def create_trip(
 
     # Validate business rules
     _validate_dispatch(vehicle, driver, trip_in.cargo_weight)
-    
-    if trip_in.scheduled_end and trip_in.scheduled_end <= trip_in.scheduled_start:
-        raise HTTPException(status_code=400, detail="Scheduled end time must be after scheduled start time")
 
     trip = Trip(
         **trip_in.model_dump(),
