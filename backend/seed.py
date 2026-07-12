@@ -60,7 +60,7 @@ db.add_all(users)
 db.commit()
 for u in users:
     db.refresh(u)
-print(f"  ✅ Created {len(users)} users")
+print(f"  [+] Created {len(users)} users")
 
 # ─── Vehicles ───────────────────────────────────────────────────────────────
 vehicles = [
@@ -126,7 +126,7 @@ db.add_all(vehicles)
 db.commit()
 for v in vehicles:
     db.refresh(v)
-print(f"  ✅ Created {len(vehicles)} vehicles (1 IN_SHOP, 1 RETIRED)")
+print(f"  [+] Created {len(vehicles)} vehicles (1 IN_SHOP, 1 RETIRED)")
 
 # ─── Drivers ────────────────────────────────────────────────────────────────
 today = date.today()
@@ -183,7 +183,7 @@ db.add_all(drivers)
 db.commit()
 for d in drivers:
     db.refresh(d)
-print(f"  ✅ Created {len(drivers)} drivers (1 expired license, 1 suspended)")
+print(f"  [+] Created {len(drivers)} drivers (1 expired license, 1 suspended)")
 
 # ─── Sample completed trip for reports ─────────────────────────────────────
 sample_trip = Trip(
@@ -237,16 +237,14 @@ maintenance = MaintenanceLog(
 db.add(maintenance)
 db.commit()
 
-print("  ✅ Created sample trip, fuel log, expense, and maintenance record")
+print("  [+] Created sample trip, fuel log, expense, and maintenance record")
 print()
-print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-print("🚀 Demo Credentials:")
-print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-print("  Fleet Manager  → fleet@transitops.com   / fleet123")
-print("  Driver         → driver@transitops.com  / driver123")
-print("  Safety Officer → safety@transitops.com  / safety123")
-print("  Finance        → finance@transitops.com / finance123")
-print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-print("✅ Seed complete!")
+print("--- Demo Credentials ---")
+print("  Fleet Manager  : fleet@transitops.com   / fleet123")
+print("  Driver         : driver@transitops.com  / driver123")
+print("  Safety Officer : safety@transitops.com  / safety123")
+print("  Finance        : finance@transitops.com / finance123")
+print("------------------------")
+print("[OK] Seed complete!")
 
 db.close()
