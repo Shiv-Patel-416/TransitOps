@@ -42,9 +42,19 @@ export function AuthProvider({ children }) {
     })
     const data = await res.json()
     if (!res.ok) throw new Error(data.error?.message || data.detail || 'Login failed')
-    localStorage.setItem('token', data.access_token || data.token)
-    setToken(data.access_token || data.token)
-    setUser(data.user || data)
+    const newToken = data.access_token || data.token
+    localStorage.setItem('token', newToken)
+    setToken(newToken)
+    // Fetch the full user profile (with role) from /me
+    const meRes = await fetch('/api/auth/me', {
+      headers: { Authorization: `Bearer ${newToken}` },
+    })
+    if (meRes.ok) {
+      const meData = await meRes.json()
+      setUser(meData.user || meData)
+    } else {
+      setUser(data.user || data)
+    }
     return data
   }
 
