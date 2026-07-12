@@ -11,13 +11,16 @@ async function request(method, path, body = null) {
   const opts = { method, headers: getHeaders() }
   if (body) opts.body = JSON.stringify(body)
   const res = await fetch(`${API_BASE}${path}`, opts)
-  const data = await res.json()
+  const text = await res.text()
+  let data = {}
+  try { data = text ? JSON.parse(text) : {} } catch { data = {} }
   if (!res.ok) {
-    const msg = data.error?.message || `Request failed (${res.status})`
+    const msg = data.error?.message || data.detail || `Request failed (${res.status})`
     throw new Error(msg)
   }
   return data
 }
+
 
 export const api = {
   get: (path) => request('GET', path),
