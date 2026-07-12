@@ -74,7 +74,19 @@ export default function Sidebar() {
 
       {/* Navigation */}
       <nav className="sidebar-nav">
-        {NAV_ITEMS.map(({ to, icon: Icon, label }) => (
+        {NAV_ITEMS.filter((item) => {
+          if (!user || !user.role) return false
+          const role = user.role
+          if (role === 'FLEET_MANAGER') return true
+          if (role === 'FINANCIAL_ANALYST') return true // Sees everything as well
+          if (role === 'SAFETY_OFFICER') {
+            return ['/', '/vehicles', '/drivers', '/maintenance'].includes(item.to)
+          }
+          if (role === 'DRIVER') {
+            return ['/trips', '/fuel-expenses'].includes(item.to)
+          }
+          return false
+        }).map(({ to, icon: Icon, label }) => (
           <NavLink
             key={to}
             to={to}
