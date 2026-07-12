@@ -6,9 +6,9 @@ from app.routers.auth import router as auth_router
 from app.routers.vehicles import router as vehicles_router
 from app.routers.drivers import router as drivers_router
 from app.routers.trips import router as trips_router
-# from app.routers.maintenance import router as maintenance_router
-# from app.routers.fuel_expenses import fuel_router, expense_router
-# from app.routers.dashboard_reports import dashboard_router, reports_router
+from app.routers.maintenance import router as maintenance_router
+from app.routers.fuel_expenses import fuel_router, expense_router
+from app.routers.dashboard_reports import dashboard_router, reports_router
 
 # Import all models so SQLAlchemy registers them before create_all
 import app.models  # noqa: F401
@@ -36,11 +36,11 @@ app.include_router(auth_router)
 app.include_router(vehicles_router)
 app.include_router(drivers_router)
 app.include_router(trips_router)
-# app.include_router(maintenance_router)
-# app.include_router(fuel_router)
-# app.include_router(expense_router)
-# app.include_router(dashboard_router)
-# app.include_router(reports_router)
+app.include_router(maintenance_router)
+app.include_router(fuel_router)
+app.include_router(expense_router)
+app.include_router(dashboard_router)
+app.include_router(reports_router)
 
 
 @app.get("/")
