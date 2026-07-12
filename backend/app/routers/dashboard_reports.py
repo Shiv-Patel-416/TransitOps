@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+﻿from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from datetime import datetime, date, timedelta
@@ -138,3 +138,4 @@ def get_vehicles_summary(db: Session = Depends(get_db), current_user: User = Dep
         })
         
     return result
+

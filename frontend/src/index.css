@@ -453,3 +453,34 @@ tr:hover td {
   margin: 0 auto 1rem;
   opacity: 0.4;
 }
+
+/* -- Dark Mode -- */
+html.dark {
+  --color-bg: #0f172a;
+  --color-surface: #1e293b;
+  --color-text: #f8fafc;
+  --color-text-secondary: #94a3b8;
+  --color-border: #334155;
+  --color-primary-light: #312e81;
+}
+
+html.dark thead,
+html.dark tr:hover td {
+  background: #0f172a;
+}
+
+html.dark .btn-secondary {
+  background: #1e293b;
+  color: #f8fafc;
+  border-color: #334155;
+}
+html.dark .btn-secondary:hover {
+  background: #334155;
+}
+
+html.dark .form-input,
+html.dark .form-select,
+html.dark .form-textarea {
+  background: #0f172a;
+  color: #f8fafc;
+}

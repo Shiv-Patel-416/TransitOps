@@ -11,8 +11,10 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
+  Moon,
+  Sun
 } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './Sidebar.css'
 
 const NAV_ITEMS = [
@@ -29,6 +31,24 @@ export default function Sidebar() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
   const [collapsed, setCollapsed] = useState(false)
+  const [isDark, setIsDark] = useState(false)
+
+  useEffect(() => {
+    const isDarkStored = localStorage.getItem('darkMode') === 'true'
+    setIsDark(isDarkStored)
+    if (isDarkStored) document.documentElement.classList.add('dark')
+  }, [])
+
+  function toggleDark() {
+    const next = !isDark
+    setIsDark(next)
+    localStorage.setItem('darkMode', next)
+    if (next) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }
 
   function handleLogout() {
     logout()
@@ -85,6 +105,10 @@ export default function Sidebar() {
             </div>
           </div>
         )}
+        <button className="sidebar-link" onClick={toggleDark} title="Toggle Dark Mode">
+          {isDark ? <Sun size={20} /> : <Moon size={20} />}
+          {!collapsed && <span>{isDark ? 'Light Mode' : 'Dark Mode'}</span>}
+        </button>
         <button className="sidebar-link sidebar-logout" onClick={handleLogout} title="Logout">
           <LogOut size={20} />
           {!collapsed && <span>Logout</span>}

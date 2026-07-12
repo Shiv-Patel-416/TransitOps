@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+﻿from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 from datetime import date
@@ -21,7 +21,7 @@ def _enrich_driver(driver: Driver) -> dict:
     return data
 
 
-@router.get("/", response_model=List[DriverOut])
+@router.get("", response_model=List[DriverOut])
 def list_drivers(
     status: DriverStatus = None,
     db: Session = Depends(get_db),
@@ -62,7 +62,7 @@ def get_driver(
     return _enrich_driver(driver)
 
 
-@router.post("/", response_model=DriverOut, status_code=201)
+@router.post("", response_model=DriverOut, status_code=201)
 def create_driver(
     driver_in: DriverCreate,
     db: Session = Depends(get_db),
@@ -109,3 +109,4 @@ def delete_driver(
         raise HTTPException(status_code=404, detail="Driver not found")
     db.delete(driver)
     db.commit()
+

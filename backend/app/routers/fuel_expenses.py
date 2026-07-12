@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+﻿from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -15,9 +15,9 @@ fuel_router = APIRouter(prefix="/api/fuel", tags=["fuel"])
 expense_router = APIRouter(prefix="/api/expenses", tags=["expenses"])
 
 
-# ─── Fuel Logs ──────────────────────────────────────────────────────────────
+# â”€â”€â”€ Fuel Logs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-@fuel_router.get("/", response_model=List[FuelLogOut])
+@fuel_router.get("", response_model=List[FuelLogOut])
 def list_fuel_logs(
     vehicle_id: int = None,
     db: Session = Depends(get_db),
@@ -43,7 +43,7 @@ def get_fuel_log(
     return log
 
 
-@fuel_router.post("/", response_model=FuelLogOut, status_code=201)
+@fuel_router.post("", response_model=FuelLogOut, status_code=201)
 def create_fuel_log(
     log_in: FuelLogCreate,
     db: Session = Depends(get_db),
@@ -76,9 +76,9 @@ def delete_fuel_log(
     return {"message": "Fuel log deleted"}
 
 
-# ─── Expenses ───────────────────────────────────────────────────────────────
+# â”€â”€â”€ Expenses â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-@expense_router.get("/", response_model=List[ExpenseOut])
+@expense_router.get("", response_model=List[ExpenseOut])
 def list_expenses(
     category: str = None,
     vehicle_id: int = None,
@@ -107,7 +107,7 @@ def get_expense(
     return exp
 
 
-@expense_router.post("/", response_model=ExpenseOut, status_code=201)
+@expense_router.post("", response_model=ExpenseOut, status_code=201)
 def create_expense(
     exp_in: ExpenseCreate,
     db: Session = Depends(get_db),
@@ -160,3 +160,4 @@ def delete_expense(
     db.delete(exp)
     db.commit()
     return {"message": "Expense deleted"}
+

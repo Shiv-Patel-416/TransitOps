@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+﻿from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
 from datetime import datetime, date
@@ -42,7 +42,7 @@ def _validate_dispatch(vehicle: Vehicle, driver: Driver, cargo_weight: float):
         )
 
 
-@router.get("/", response_model=List[TripOut])
+@router.get("", response_model=List[TripOut])
 def list_trips(
     status: TripStatus = None,
     db: Session = Depends(get_db),
@@ -68,7 +68,7 @@ def get_trip(
     return trip
 
 
-@router.post("/", response_model=TripOut, status_code=201)
+@router.post("", response_model=TripOut, status_code=201)
 def create_trip(
     trip_in: TripCreate,
     db: Session = Depends(get_db),
@@ -186,3 +186,4 @@ def cancel_trip(
     db.commit()
     db.refresh(trip)
     return trip
+

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+﻿from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -13,7 +13,7 @@ from app.core.rbac import require_permission
 router = APIRouter(prefix="/api/vehicles", tags=["vehicles"])
 
 
-@router.get("/", response_model=List[VehicleOut])
+@router.get("", response_model=List[VehicleOut])
 def list_vehicles(
     status: VehicleStatus = None,
     type: str = None,
@@ -55,7 +55,7 @@ def get_vehicle(
     return vehicle
 
 
-@router.post("/", response_model=VehicleOut, status_code=201)
+@router.post("", response_model=VehicleOut, status_code=201)
 def create_vehicle(
     vehicle_in: VehicleCreate,
     db: Session = Depends(get_db),
@@ -133,3 +133,4 @@ def get_operational_cost(
         "maintenance_cost": maintenance_cost,
         "total_cost": fuel_cost + maintenance_cost
     }
+

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+﻿from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 from datetime import datetime
@@ -15,7 +15,7 @@ from app.core.rbac import require_permission
 router = APIRouter(prefix="/api/maintenance", tags=["maintenance"])
 
 
-@router.get("/", response_model=List[MaintenanceLogOut])
+@router.get("", response_model=List[MaintenanceLogOut])
 def list_maintenance_logs(
     status: MaintenanceStatus = None,
     vehicle_id: int = None,
@@ -44,7 +44,7 @@ def get_maintenance_log(
     return log
 
 
-@router.post("/", response_model=MaintenanceLogOut, status_code=201)
+@router.post("", response_model=MaintenanceLogOut, status_code=201)
 def create_maintenance_log(
     log_in: MaintenanceLogCreate,
     db: Session = Depends(get_db),
@@ -119,3 +119,4 @@ def delete_maintenance_log(
     db.delete(log)
     db.commit()
     return {"message": "Maintenance log deleted"}
+
