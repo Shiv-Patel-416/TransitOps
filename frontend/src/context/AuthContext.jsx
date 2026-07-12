@@ -17,7 +17,7 @@ export function AuthProvider({ children }) {
 
   async function fetchMe() {
     try {
-      const res = await fetch('/api/v1/auth/me', {
+      const res = await fetch('/api/auth/me', {
         headers: { Authorization: `Bearer ${token}` },
       })
       if (res.ok) {
@@ -35,30 +35,30 @@ export function AuthProvider({ children }) {
   }
 
   async function login(email, password) {
-    const res = await fetch('/api/v1/auth/login', {
+    const res = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
     })
     const data = await res.json()
-    if (!res.ok) throw new Error(data.error?.message || 'Login failed')
-    localStorage.setItem('token', data.token)
-    setToken(data.token)
-    setUser(data.user)
+    if (!res.ok) throw new Error(data.error?.message || data.detail || 'Login failed')
+    localStorage.setItem('token', data.access_token || data.token)
+    setToken(data.access_token || data.token)
+    setUser(data.user || data)
     return data
   }
 
   async function register(username, email, password, role) {
-    const res = await fetch('/api/v1/auth/register', {
+    const res = await fetch('/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, email, password, role }),
+      body: JSON.stringify({ name: username, email, password, role }),
     })
     const data = await res.json()
-    if (!res.ok) throw new Error(data.error?.message || 'Registration failed')
-    localStorage.setItem('token', data.token)
-    setToken(data.token)
-    setUser(data.user)
+    if (!res.ok) throw new Error(data.error?.message || data.detail || 'Registration failed')
+    localStorage.setItem('token', data.access_token || data.token)
+    setToken(data.access_token || data.token)
+    setUser(data.user || data)
     return data
   }
 

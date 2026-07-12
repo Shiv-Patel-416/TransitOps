@@ -105,12 +105,12 @@ export default function LoginPage() {
         <div className="login-demo">
           <p className="login-demo-title">Demo Credentials</p>
           <div className="login-demo-grid">
-            <DemoCred role="Fleet Manager" email="fleet@demo.com" onClick={setEmail} />
-            <DemoCred role="Driver" email="driver@demo.com" onClick={setEmail} />
-            <DemoCred role="Safety Officer" email="safety@demo.com" onClick={setEmail} />
-            <DemoCred role="Financial Analyst" email="finance@demo.com" onClick={setEmail} />
+            <DemoCred role="Fleet Manager" email="fleet@transitops.com" onClick={setEmail} />
+            <DemoCred role="Driver" email="driver@transitops.com" onClick={setEmail} />
+            <DemoCred role="Safety Officer" email="safety@transitops.com" onClick={setEmail} />
+            <DemoCred role="Financial Analyst" email="finance@transitops.com" onClick={setEmail} />
           </div>
-          <p className="login-demo-hint">Password for all: <strong>password123</strong></p>
+          <p className="login-demo-hint">Passwords: role name + <strong>123</strong> (e.g. <strong>fleet123</strong>)</p>
         </div>
       </div>
     </div>
