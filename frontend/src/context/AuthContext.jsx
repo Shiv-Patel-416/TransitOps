@@ -21,8 +21,9 @@ export function AuthProvider({ children }) {
         headers: { Authorization: `Bearer ${token}` },
       })
       if (res.ok) {
-        const data = await res.json()
-        setUser(data.user)
+        const text = await res.text()
+        const data = text ? JSON.parse(text) : {}
+        setUser(data.user || data)
       } else {
         logout()
       }
