@@ -7,17 +7,20 @@ PERMISSIONS = {
         "vehicles:read", "vehicles:write", "vehicles:delete",
         "drivers:read", "drivers:write", "drivers:delete",
         "trips:read", "trips:write", "trips:delete",
-        "maintenance:read",
-        "fuel:read",
-        "expenses:read",
+        "maintenance:read", "maintenance:write",
+        "fuel:read", "fuel:write",
+        "expenses:read", "expenses:write", "expenses:delete",
         "dashboard:read",
         "reports:read",
+        # Aliases used by some routers
+        "finance:read", "finance:write",
     },
     Role.DRIVER: {
         "trips:read",
         "trips:update_status",
         "fuel:write",
         "fuel:read",
+        "finance:read", "finance:write",
     },
     Role.SAFETY_OFFICER: {
         "vehicles:read",
@@ -34,6 +37,7 @@ PERMISSIONS = {
         "expenses:read", "expenses:write", "expenses:delete",
         "dashboard:read",
         "reports:read",
+        "finance:read", "finance:write",
     },
 }
 
