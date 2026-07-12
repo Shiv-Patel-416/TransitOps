@@ -323,10 +323,9 @@ DRAFT → DISPATCHED → COMPLETED
 
 | Layer      | Technology                          |
 | ---------- | ----------------------------------- |
-| Backend    | Node.js + Express                   |
-| Database   | PostgreSQL                          |
-| ORM        | Prisma                              |
-| Auth       | JWT (jsonwebtoken + bcrypt)         |
+| Backend    | Python + FastAPI                    |
+| Database   | SQLite (via SQLAlchemy)             |
+| Auth       | JWT (python-jose + passlib/bcrypt)  |
 | Frontend   | React 19 (Vite)                     |
 | Styling    | Tailwind CSS 4                      |
 | Icons      | Lucide React                        |
@@ -343,10 +342,10 @@ cd TransitOps
 
 # Backend
 cd backend
-npm install
-cp .env.example .env   # fill in DB url, JWT secret
-npx prisma migrate dev
-npm run dev
+pip install -r requirements.txt
+python seed.py          # seeds DB with demo data
+python -m uvicorn app.main:app --reload --port 8000
+# API docs at http://localhost:8000/docs
 
 # Frontend (new terminal)
 cd frontend
@@ -356,12 +355,12 @@ npm run dev             # runs on http://localhost:5173
 
 ### Demo Credentials
 
-| Role              | Email              | Password      |
-| ----------------- | ------------------ | ------------- |
-| Fleet Manager     | fleet@demo.com     | password123   |
-| Driver            | driver@demo.com    | password123   |
-| Safety Officer    | safety@demo.com    | password123   |
-| Financial Analyst | finance@demo.com   | password123   |
+| Role              | Email                    | Password   |
+| ----------------- | ------------------------ | ---------- |
+| Fleet Manager     | fleet@transitops.com     | fleet123   |
+| Driver            | driver@transitops.com    | driver123  |
+| Safety Officer    | safety@transitops.com    | safety123  |
+| Financial Analyst | finance@transitops.com   | finance123 |
 
 ---
 
@@ -370,17 +369,17 @@ npm run dev             # runs on http://localhost:5173
 ```
 TransitOps/
 ├── backend/
-│   ├── prisma/
-│   │   └── schema.prisma
-│   ├── src/
-│   │   ├── routes/        # Express routers
-│   │   ├── controllers/   # Request handlers
-│   │   ├── middleware/     # auth, rbac, error handling
-│   │   ├── services/      # Business logic
-│   │   ├── utils/         # helpers
-│   │   └── index.js       # entry point
-│   ├── .env.example
-│   └── package.json
+│   ├── app/
+│   │   ├── core/          # config, security (JWT), rbac
+│   │   ├── models/        # SQLAlchemy models + enums
+│   │   ├── schemas/       # Pydantic request/response schemas
+│   │   ├── routers/       # FastAPI routers (auth, vehicles, drivers, trips, etc.)
+│   │   ├── database.py    # SQLAlchemy engine + session
+│   │   ├── dependencies.py# Auth dependency (get_current_user)
+│   │   └── main.py        # FastAPI app entry point
+│   ├── seed.py            # Demo data seeder
+│   ├── requirements.txt
+│   └── .env
 ├── frontend/
 │   ├── src/
 │   │   ├── components/    # Sidebar, Layout, modals
