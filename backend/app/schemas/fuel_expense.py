@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, Union
 from datetime import date as dt_date, datetime
 from app.models.enums import ExpenseCategory
 
@@ -8,13 +8,13 @@ class FuelLogBase(BaseModel):
     trip_id: Optional[int] = None
     liters: float
     cost: float
-    date: Optional[dt_date] = None
 
 class FuelLogCreate(FuelLogBase):
-    pass
+    date: Optional[dt_date] = None
 
 class FuelLogOut(FuelLogBase):
     id: int
+    date: Optional[dt_date] = None
     created_at: datetime
     created_by_id: Optional[int] = None
 
@@ -26,13 +26,13 @@ class ExpenseBase(BaseModel):
     category: ExpenseCategory
     amount: float
     description: Optional[str] = None
-    date: Optional[dt_date] = None
 
 class ExpenseCreate(ExpenseBase):
-    pass
+    date: Optional[dt_date] = None
 
 class ExpenseOut(ExpenseBase):
     id: int
+    date: Optional[dt_date] = None
     created_at: datetime
     created_by_id: Optional[int] = None
 
