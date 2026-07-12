@@ -107,3 +107,29 @@ def delete_vehicle(
         raise HTTPException(status_code=404, detail="Vehicle not found")
     db.delete(vehicle)
     db.commit()
+
+
+@router.get("/{vehicle_id}/operational-cost")
+def get_operational_cost(
+    vehicle_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    require_permission(current_user.role, "vehicles:read")
+    vehicle = db.query(Vehicle).filter(Vehicle.id == vehicle_id).first()
+    if not vehicle:
+        raise HTTPException(status_code=404, detail="Vehicle not found")
+
+    from app.models.fuel_log import FuelLog
+    from app.models.maintenance_log import MaintenanceLog
+    from sqlalchemy import func
+
+    fuel_cost = db.query(func.sum(FuelLog.cost)).filter(FuelLog.vehicle_id == vehicle_id).scalar() or 0.0
+    maintenance_cost = db.query(func.sum(MaintenanceLog.cost)).filter(MaintenanceLog.vehicle_id == vehicle_id).scalar() or 0.0
+
+    return {
+        "vehicle_id": vehicle_id,
+        "fuel_cost": fuel_cost,
+        "maintenance_cost": maintenance_cost,
+        "total_cost": fuel_cost + maintenance_cost
+    }

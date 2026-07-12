@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { api } from '../services/api'
-import { Plus, Fuel, DollarSign, Search, X } from 'lucide-react'
+import { Plus, Fuel, DollarSign, X } from 'lucide-react'
 import './FuelExpensesPage.css'
 
 const EXPENSE_CATEGORIES = ['FUEL', 'MAINTENANCE', 'TOLL', 'INSURANCE', 'OTHER']
@@ -27,6 +27,11 @@ export default function FuelExpensesPage() {
   const [trips, setTrips] = useState([])
   const [loading, setLoading] = useState(true)
   
+  // Filter by Vehicle & Total Operational Cost
+  const [selectedVehicleFilter, setSelectedVehicleFilter] = useState('')
+  const [operationalCostData, setOperationalCostData] = useState(null)
+  const [loadingOpsCost, setLoadingOpsCost] = useState(false)
+
   const [showFuelModal, setShowFuelModal] = useState(false)
   const [showExpenseModal, setShowExpenseModal] = useState(false)
   
@@ -39,6 +44,14 @@ export default function FuelExpensesPage() {
   useEffect(() => {
     loadData()
   }, [])
+
+  useEffect(() => {
+    if (selectedVehicleFilter) {
+      loadOperationalCost(selectedVehicleFilter)
+    } else {
+      setOperationalCostData(null)
+    }
+  }, [selectedVehicleFilter])
 
   async function loadData() {
     setLoading(true)
@@ -57,6 +70,18 @@ export default function FuelExpensesPage() {
       console.error(err)
     } finally {
       setLoading(false)
+    }
+  }
+
+  async function loadOperationalCost(vehicleId) {
+    setLoadingOpsCost(true)
+    try {
+      const res = await api.get(`/vehicles/${vehicleId}/operational-cost`)
+      setOperationalCostData(res.data || res)
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setLoadingOpsCost(false)
     }
   }
 
@@ -89,6 +114,9 @@ export default function FuelExpensesPage() {
       await api.post('/fuel', payload)
       setShowFuelModal(false)
       loadData()
+      if (selectedVehicleFilter && parseInt(selectedVehicleFilter) === payload.vehicle_id) {
+        loadOperationalCost(selectedVehicleFilter)
+      }
     } catch (err) {
       setFormError(err.message || 'Failed to log fuel')
     } finally {
@@ -111,6 +139,9 @@ export default function FuelExpensesPage() {
       await api.post('/expenses', payload)
       setShowExpenseModal(false)
       loadData()
+      if (selectedVehicleFilter && parseInt(selectedVehicleFilter) === payload.vehicle_id) {
+        loadOperationalCost(selectedVehicleFilter)
+      }
     } catch (err) {
       setFormError(err.message || 'Failed to log expense')
     } finally {
@@ -128,6 +159,14 @@ export default function FuelExpensesPage() {
     const t = trips.find(t => t.id === id)
     return t ? `Trip #${t.id} (${t.source} to ${t.destination})` : `Trip #${id}`
   }
+
+  const filteredFuelLogs = fuelLogs.filter(log => 
+    !selectedVehicleFilter || log.vehicle_id === parseInt(selectedVehicleFilter)
+  )
+
+  const filteredExpenses = expenses.filter(exp => 
+    !selectedVehicleFilter || exp.vehicle_id === parseInt(selectedVehicleFilter)
+  )
 
   return (
     <div>
@@ -150,7 +189,40 @@ export default function FuelExpensesPage() {
         </div>
       </div>
 
-      <div className="tabs">
+      {/* Vehicle Operational Cost Display */}
+      <div className="vehicles-filters" style={{ flexWrap: 'wrap', gap: '1rem', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <label style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--color-text)' }}>Filter by Vehicle:</label>
+          <select
+            className="form-select"
+            value={selectedVehicleFilter}
+            onChange={(e) => setSelectedVehicleFilter(e.target.value)}
+            style={{ width: '220px' }}
+          >
+            <option value="">All Vehicles</option>
+            {vehicles.map(v => (
+              <option key={v.id} value={v.id}>{v.registration_number} - {v.name}</option>
+            ))}
+          </select>
+        </div>
+
+        {selectedVehicleFilter && operationalCostData && (
+          <div className="card operational-cost-summary" style={{ flex: 1, padding: '0.75rem 1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', minWidth: '300px' }}>
+            <div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>Operational Summary</div>
+              <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--color-primary)' }}>
+                Total Cost: ${operationalCostData.total_cost.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: '1rem', fontSize: '0.8125rem', color: 'var(--color-text-secondary)' }}>
+              <div>Fuel: <strong>${operationalCostData.fuel_cost.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong></div>
+              <div>Maintenance: <strong>${operationalCostData.maintenance_cost.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong></div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="tabs" style={{ marginTop: '1.5rem' }}>
         <button 
           className={`tab ${activeTab === 'fuel' ? 'active' : ''}`}
           onClick={() => setActiveTab('fuel')}
@@ -184,7 +256,7 @@ export default function FuelExpensesPage() {
                   <tr>
                     <td colSpan={6} className="empty-state">Loading fuel logs...</td>
                   </tr>
-                ) : fuelLogs.length === 0 ? (
+                ) : filteredFuelLogs.length === 0 ? (
                   <tr>
                     <td colSpan={6} className="empty-state">
                       <Fuel size={40} strokeWidth={1} />
@@ -192,7 +264,7 @@ export default function FuelExpensesPage() {
                     </td>
                   </tr>
                 ) : (
-                  fuelLogs.map((log) => (
+                  filteredFuelLogs.map((log) => (
                     <tr key={log.id}>
                       <td>#{log.id}</td>
                       <td>{getVehicleName(log.vehicle_id)}</td>
@@ -224,7 +296,7 @@ export default function FuelExpensesPage() {
                   <tr>
                     <td colSpan={6} className="empty-state">Loading expenses...</td>
                   </tr>
-                ) : expenses.length === 0 ? (
+                ) : filteredExpenses.length === 0 ? (
                   <tr>
                     <td colSpan={6} className="empty-state">
                       <DollarSign size={40} strokeWidth={1} />
@@ -232,7 +304,7 @@ export default function FuelExpensesPage() {
                     </td>
                   </tr>
                 ) : (
-                  expenses.map((exp) => (
+                  filteredExpenses.map((exp) => (
                     <tr key={exp.id}>
                       <td>#{exp.id}</td>
                       <td>{getVehicleName(exp.vehicle_id)}</td>
