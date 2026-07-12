@@ -327,7 +327,7 @@ DRAFT → DISPATCHED → COMPLETED
 | Database   | SQLite (via SQLAlchemy)             |
 | Auth       | JWT (python-jose + passlib/bcrypt)  |
 | Frontend   | React 19 (Vite)                     |
-| Styling    | Tailwind CSS 4                      |
+| Styling    | Vanilla CSS (Custom Design System)  |
 | Icons      | Lucide React                        |
 | Routing    | React Router DOM                    |
 
