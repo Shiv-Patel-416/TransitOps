@@ -1,0 +1,16 @@
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.app-main {
+  flex: 1;
+  margin-left: 260px;
+  padding: 2rem;
+  transition: margin-left var(--transition);
+  min-height: 100vh;
+}
+
+/* When sidebar is collapsed, the Layout doesn't know directly,
+   but we can handle it with a CSS variable or just keep the 260px fixed.
+   The sidebar component handles its own width. We'll use JS for this. */

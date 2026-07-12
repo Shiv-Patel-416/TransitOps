@@ -321,14 +321,16 @@ DRAFT → DISPATCHED → COMPLETED
 
 ## Tech Stack
 
-| Layer      | Technology                    |
-| ---------- | ----------------------------- |
-| Backend    | Node.js + Express             |
-| Database   | PostgreSQL                    |
-| ORM        | Prisma                        |
-| Auth       | JWT (jsonwebtoken + bcrypt)   |
-| Frontend   | React (Vite)                  |
-| Styling    | Vanilla CSS                   |
+| Layer      | Technology                          |
+| ---------- | ----------------------------------- |
+| Backend    | Node.js + Express                   |
+| Database   | PostgreSQL                          |
+| ORM        | Prisma                              |
+| Auth       | JWT (jsonwebtoken + bcrypt)         |
+| Frontend   | React 19 (Vite)                     |
+| Styling    | Tailwind CSS 4                      |
+| Icons      | Lucide React                        |
+| Routing    | React Router DOM                    |
 
 ---
 
@@ -340,25 +342,34 @@ git clone https://github.com/Shiv-Patel-416/TransitOps.git
 cd TransitOps
 
 # Backend
-cd server
+cd backend
 npm install
 cp .env.example .env   # fill in DB url, JWT secret
 npx prisma migrate dev
 npm run dev
 
 # Frontend (new terminal)
-cd client
+cd frontend
 npm install
-npm run dev
+npm run dev             # runs on http://localhost:5173
 ```
+
+### Demo Credentials
+
+| Role              | Email              | Password      |
+| ----------------- | ------------------ | ------------- |
+| Fleet Manager     | fleet@demo.com     | password123   |
+| Driver            | driver@demo.com    | password123   |
+| Safety Officer    | safety@demo.com    | password123   |
+| Financial Analyst | finance@demo.com   | password123   |
 
 ---
 
-## Project Structure (planned)
+## Project Structure
 
 ```
 TransitOps/
-├── server/
+├── backend/
 │   ├── prisma/
 │   │   └── schema.prisma
 │   ├── src/
@@ -370,15 +381,17 @@ TransitOps/
 │   │   └── index.js       # entry point
 │   ├── .env.example
 │   └── package.json
-├── client/
+├── frontend/
 │   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── hooks/
-│   │   ├── services/      # API calls
-│   │   ├── App.jsx
-│   │   └── main.jsx
+│   │   ├── components/    # Sidebar, Layout, modals
+│   │   ├── context/       # AuthContext (JWT state)
+│   │   ├── pages/         # LoginPage, Dashboard, etc.
+│   │   ├── services/      # api.js (fetch wrapper)
+│   │   ├── App.jsx        # Router setup
+│   │   ├── index.css      # Tailwind + design tokens
+│   │   └── main.jsx       # Entry point
 │   ├── index.html
+│   ├── vite.config.js
 │   └── package.json
 └── README.md
 ```
